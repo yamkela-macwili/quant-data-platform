@@ -84,34 +84,24 @@ Everything is designed to be:
 ---
 
 ## Architecture Overview
+```mermaid
+flowchart TD
+    A[Data Providers]
+    B[Data Ingestion]
+    C["Research Layer<br/>(Strategies/Alpha)"]
+    D[Backtesting Engine]
+    E[Analytics Engine]
+    F[Execution Engine]
 
-```
-                 +----------------------+
-                 |   Data Providers     |
-                 +----------+-----------+
-                            |
-                            v
-                 +----------------------+
-                 |   Data Ingestion     |
-                 +----------+-----------+
-                            |
-                            v
-                 +----------------------+
-                 |   Research Layer     |
-                 | (Strategies/Alpha)   |
-                 +----------+-----------+
-                            |
-                            v
-                 +----------------------+
-                 |   Backtesting Engine |
-                 +----------+-----------+
-                            |
-                +-----------+------------+
-                |                        |
-                v                        v
-     +--------------------+   +----------------------+
-     | Analytics Engine   |   | Execution Engine     |
-     +--------------------+   +----------------------+
+    A --> B --> C --> D
+    D --> E
+    D --> F
+
+    subgraph Core Platform
+        B
+        C
+        D
+    end
 ```
 
 ---
