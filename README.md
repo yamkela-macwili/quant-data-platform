@@ -177,8 +177,8 @@ algo-trading-platform/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/<your-username>/algo-trading-platform.git
-cd algo-trading-platform
+git clone https://github.com/yamkela-macwili/quant-data-platform.git
+cd quant-data-platform
 ```
 
 ### 2. Create virtual environment
