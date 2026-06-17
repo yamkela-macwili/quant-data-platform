@@ -1,8 +1,6 @@
-# Algorithmic Trading Research & Execution Platform
+# Quant Data Platform
 
-A modular research and execution system for developing, testing, and deploying algorithmic trading strategies. The platform is designed to support rapid experimentation, reproducible research, and eventual integration with live or paper trading environments.
-
-This project prioritizes **correctness, observability, and extensibility** over premature complexity.
+A production grade financial data platform for market data ingestion, feature engineering, quantitative research, and strategy evaluation.
 
 ---
 
@@ -141,33 +139,44 @@ flowchart TD
 ## 📁 Repository Structure
 
 ```
-algo-trading-platform/
+quant-data-platform/
 │
 ├── docs/
 │   ├── PRD.md
 │   ├── DESIGN.md
 │   ├── TECH_STACK.md
+│   └── ROADMAP.md
 │
 ├── src/
-│   ├── data/
-│   ├── research/
+│   ├── ingestion/
+│   ├── pipelines/
+│   ├── storage/
+│   ├── features/
 │   ├── backtesting/
-│   ├── execution/
 │   ├── analytics/
+│   ├── api/
 │   └── common/
+│
+├── flows/
 │
 ├── tests/
 │
 ├── notebooks/
 │
-├── scripts/
+├── infrastructure/
+│   ├── docker/
+│   ├── grafana/
+│   ├── prometheus/
+│   └── compose/
 │
-├── docker/
+├── .github/
+│   └── workflows/
 │
 ├── docker-compose.yml
 ├── Makefile
 ├── requirements.txt
-└── README.md
+├── README.md
+└── LICENSE
 ```
 
 ---
