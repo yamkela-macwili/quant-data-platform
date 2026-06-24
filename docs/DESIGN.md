@@ -1,174 +1,59 @@
-# System Design Document
+# Design - Quant Data Platform
+
+## Architecture
+
+```mermaid
+flowchart TD
+
+    API["Binance Public REST API"]
+
+    subgraph Ingestion
+        ING["src/ingestion/<br/>(fetch OHLCV)"]
+        RAW["data/raw/*.parquet"]
+    end
+
+    subgraph Processing
+        PROC["src/processing/<br/>(clean + validate)"]
+        CLEAN["data/processed/*.parquet"]
+    end
+
+    subgraph FeatureEngineering
+        FEAT["src/indicators/<br/>(SMA, EMA, RSI)"]
+        FEATURED["data/processed/*_featured.parquet"]
+    end
+
+    subgraph Analytics
+        ANALYTICS["src/analytics/<br/>(returns, charts, reports)"]
+        REPORTS["reports/"]
+    end
+
+    API --> ING
+    ING --> RAW
+    RAW --> PROC
+    PROC --> CLEAN
+    CLEAN --> FEAT
+    FEAT --> FEATURED
+    FEATURED --> ANALYTICS
+    ANALYTICS --> REPORTS
+```
+
+## Module Responsibilities
+
+| Module | Responsibility |
+|--------|---------------|
+| `src/ingestion/binance.py` | Paginated fetch from Binance `/api/v3/klines` |
+| `src/processing/cleaner.py` | Dedup, null-drop, sort |
+| `src/processing/validator.py` | Data integrity checks |
+| `src/indicators/pipeline.py` | Orchestrate SMA/EMA/RSI |
+| `src/analytics/charts.py` | Matplotlib chart output |
+| `src/analytics/returns.py` | Returns and volatility |
+| `src/analytics/summary.py` | Top moves, indicator snapshots |
+
+## Data Storage
+
+- **Format:** Parquet (via `pyarrow`)
+- **Raw:** `data/raw/`
+- **Processed:** `data/processed/`
+- **Reports:** `reports/`
 
-# Quant Data Platform
 
-## 1. Architectural Principles
-
-The platform follows the following principles:
-
-* Separation of concerns
-* Single responsibility
-* Reproducibility
-* Modularity
-* Testability
-
----
-
-## 2. High-Level Architecture
-
-Market Data Provider
-
-↓
-
-Ingestion Layer
-
-↓
-
-Storage Layer
-
-↓
-
-ETL Pipeline
-
-↓
-
-Feature Store
-
-↓
-
-Backtesting Engine
-
-↓
-
-Analytics Layer
-
----
-
-## 3. Module Responsibilities
-
-### Ingestion
-
-Responsibilities:
-
-* Download market data
-* Validate source responses
-* Persist raw datasets
-
-### Storage
-
-Responsibilities:
-
-* Manage raw datasets
-* Manage processed datasets
-* Provide repository abstractions
-
-### Pipelines
-
-Responsibilities:
-
-* Data cleaning
-* Data validation
-* Dataset transformation
-
-### Features
-
-Responsibilities:
-
-* Technical indicator generation
-* Feature persistence
-
-### Backtesting
-
-Responsibilities:
-
-* Historical replay
-* Trade simulation
-* Portfolio management
-
-### Analytics
-
-Responsibilities:
-
-* Performance metrics
-* Strategy evaluation
-
-### Common
-
-Responsibilities:
-
-* Shared utilities
-* Configuration
-* Logging
-
----
-
-## 4. Data Flow
-
-Market Data Source
-
-↓
-
-Raw Dataset
-
-↓
-
-Validation Pipeline
-
-↓
-
-Processed Dataset
-
-↓
-
-Feature Generation
-
-↓
-
-Strategy Evaluation
-
-↓
-
-Performance Analytics
-
----
-
-## 5. Storage Strategy
-
-### Raw Layer
-
-Stores original downloaded datasets.
-
-Purpose:
-
-* Auditing
-* Reproducibility
-
-### Processed Layer
-
-Stores cleaned datasets.
-
-Purpose:
-
-* Feature generation
-* Analysis
-
-### Feature Layer
-
-Stores engineered indicators.
-
-Purpose:
-
-* Backtesting
-* Research
-
----
-
-## 6. Future Architecture Extensions
-
-Potential future additions:
-
-* Prefect orchestration
-* Redis Streams
-* Broker integrations
-* Monitoring dashboards
-* Cloud deployment
